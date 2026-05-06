@@ -66,8 +66,9 @@ public class DesignLinkedList {
         public void addAtIndex(int index, int val) {
             if (index==size) {
                 addAtTail(val);
+                return;
             }
-            if (index <0 || index>=size) {
+            if (index <0 || index>size) {
                 return;
             }
             Node p = head.next;
@@ -75,10 +76,9 @@ public class DesignLinkedList {
                 p = p.next;
             }
             Node prev = p.prev;
-            Node next = p.next;
             Node newNode = new Node(val);
-            newNode.next = next;
-            next.prev = newNode;
+            newNode.next = p;
+            p.prev = newNode;
             newNode.prev = prev;
             prev.next = newNode;
             size++;
@@ -98,6 +98,16 @@ public class DesignLinkedList {
             next.prev = prev;
             size--;
         }
+
+        public void printList(){
+            Node cur = head.next;
+            while (cur != tail) {
+                System.out.print(cur.val + "->");
+                cur = cur.next;
+            }
+            System.out.println("\n");
+            System.out.println("-------------");
+        }
     }
     
     /**
@@ -113,8 +123,20 @@ public class DesignLinkedList {
 
     
 //    public static void main(String[] args) {
-//        Solution solution = new DesignLinkedList().new Solution();
-//        // put your test code here
-//
+//        MyLinkedList myLinkedList = new MyLinkedList();
+//        myLinkedList.addAtHead(1);
+//        myLinkedList.printList();
+//        myLinkedList.addAtTail(3);
+//        myLinkedList.printList();
+//        myLinkedList.addAtIndex(1, 2); // 链表变为 1->2->3
+//        myLinkedList.printList();
+//        myLinkedList.get(1); // 返回 2
+//        int x = myLinkedList.get(1);
+//        System.out.println(x);
+//        myLinkedList.deleteAtIndex(1); // 现在，链表变为 1->3
+//        myLinkedList.printList();
+//        myLinkedList.get(1); // 返回 3
+//        int y = myLinkedList.get(1);
+//        System.out.println(y);
 //    }
 }
