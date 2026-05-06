@@ -2,7 +2,7 @@ package leetcode.editor.common;
 
 import java.util.NoSuchElementException;
 
-public class DoublyListNode<E> {
+public class MyDoublyLinkedList<E> {
     private static class Node<E> {
         E val;
         Node<E> prev;
@@ -16,7 +16,7 @@ public class DoublyListNode<E> {
     private Node<E> tail;
     private int size;
 
-    public DoublyListNode(){
+    public MyDoublyLinkedList(){
         this.head = new Node<>(null);
         this.tail = new Node<>(null);
         this.size = 0;

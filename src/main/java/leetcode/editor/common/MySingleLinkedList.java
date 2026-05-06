@@ -2,7 +2,7 @@ package leetcode.editor.common;
 
 import java.util.NoSuchElementException;
 
-public class SingleListNode<E> {
+public class MySingleLinkedList<E> {
     private static class Node<E> {
         E val;
         Node<E> next;
@@ -18,7 +18,7 @@ public class SingleListNode<E> {
 
     private int size;
 
-    public SingleListNode() {
+    public MySingleLinkedList() {
         this.head = new Node<>(null);
         this.tail = head;
         this.size = 0;
@@ -170,7 +170,7 @@ public class SingleListNode<E> {
     }
 
     public static void main(String[] args) {
-        SingleListNode<Integer> list = new SingleListNode<>();
+        MySingleLinkedList<Integer> list = new MySingleLinkedList<>();
         list.addFirst(1);
         list.addFirst(2);
         list.addLast(3);

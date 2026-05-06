@@ -1,0 +1,279 @@
+# 方法一：带虚拟头结点的单链表
+
+为了方便，我们加入一个虚拟的头结点来实现链表。然后定义`head`和`tail`两个指分向链表的头结点和尾结点，`size`变量记录链表结点的个数
+
+* java
+
+```java
+//指向虚拟头结点
+private Node head;
+//指向尾结点
+private Node tail;
+//当前链表的结点数量
+private int size;
+```
+
+**链表的结点结构**
+
+* java
+
+```java
+    static class Node {
+        //值
+        private int val;
+        //下一个结点
+        private Node next;
+
+        public Node(int val) {
+            this.val = val;
+        }
+
+        public Node() {
+        }
+    }
+```
+
+## 链表的插入
+
+**插入头结点**
+如图所示，灰色结点表示虚拟头结点，即不存在任何值，方便后续的操作。
+![LeetCode707插入头结点.gif](https://pic.leetcode.cn/1663892191-cHQUiq-LeetCode707%E6%8F%92%E5%85%A5%E5%A4%B4%E7%BB%93%E7%82%B9.gif)
+
+* java
+
+```java
+public void addAtHead(int val) {
+    this.size++;
+    Node node = new Node(val);
+    node.next = head.next;
+    head.next = node;
+    if (size == 1) {
+        tail = node;
+    }
+}
+```
+
+**插入尾结点**
+由于我们有`tail`指针，直接指向链表的尾结点，因此我们只需要，放置到尾部即可
+![LeetCode707插入尾结点.gif](https://pic.leetcode.cn/1663892611-RjmoQD-LeetCode707%E6%8F%92%E5%85%A5%E5%B0%BE%E7%BB%93%E7%82%B9.gif)
+
+* java
+
+```java
+public void addAtTail(int val) {
+    this.size++;
+    Node node = new Node(val);
+    tail.next = node;
+    tail = node;
+}
+```
+
+**插入任意结点**
+插入任意位置时，我们需要遍历到插入位置的前一个结点，然后执行插入。
+![LeetCode707插入任意位置.gif](https://pic.leetcode.cn/1663892669-gYWMnR-LeetCode707%E6%8F%92%E5%85%A5%E4%BB%BB%E6%84%8F%E4%BD%8D%E7%BD%AE.gif)
+
+* java
+
+```java
+public void addAtIndex(int index, int val) {
+    if (index > size) {
+        return;
+    }
+    if (index == size) {
+        addAtTail(val);
+        return;
+    }
+    if (index < 0) {
+        addAtHead(val);
+        return;
+    }
+    Node cur = head;
+    int i = 0;
+    //找到index的前一个元素
+    while (i < index) {
+        cur = cur.next;
+        i++;
+    }
+    Node node = new Node(val);
+    node.next = cur.next;
+    cur.next = node;
+    this.size++;
+}
+```
+
+**查找任意结点**
+查找时，我们直接遍历到`index`位置，返回其`val`值即可
+![LeetCode707查找任意结点.gif](https://pic.leetcode.cn/1663892828-ArNPPP-LeetCode707%E6%9F%A5%E6%89%BE%E4%BB%BB%E6%84%8F%E7%BB%93%E7%82%B9.gif)
+
+* java
+
+```java
+public int get(int index) {
+    //合法性校验
+    if (index > size - 1) {
+        return -1;
+    }
+    Node cur = head.next;
+    int i = 0;
+    //找到位置
+    while (i < index) {
+        cur = cur.next;
+        i++;
+    }
+    return cur.val;
+}
+```
+
+**删除任意结点**
+删除结点，我们需要遍历到待删除位置的前一个结点，然后进行删除操作。
+![LeetCode707删除任意结点.gif](https://pic.leetcode.cn/1663892864-GcdGRB-LeetCode707%E5%88%A0%E9%99%A4%E4%BB%BB%E6%84%8F%E7%BB%93%E7%82%B9.gif)
+
+* java
+
+```java
+public void deleteAtIndex(int index) {
+    if (index > size - 1 || index < 0) {
+        return;
+    }
+    Node cur = head;
+    int i = 0;
+    //找到前一个结点
+    while (i < index) {
+        cur = cur.next;
+        i++;
+    }
+    //维护tail指针
+    if (cur.next == tail) {
+        tail = cur;
+    }
+    //如果存在，指向待删除结点的下一个结点 
+    if (cur.next != null) {
+        cur.next = cur.next.next;
+    }
+    this.size--;
+}
+```
+
+**整体代码如下：**
+
+* java
+
+```java
+class MyLinkedList { 
+    static class Node {
+        //值
+        private int val;
+        //下一个结点
+        private Node next;
+
+        public Node(int val) {
+            this.val = val;
+        }
+
+        public Node() {
+        }
+    }
+    //指向虚拟头结点
+    private Node head;
+    //指向尾结点
+    private Node tail;
+    //当前链表的结点数量
+    private int size;
+
+    public MyLinkedList() {
+        //创建一个带头结点的
+        this.head = new Node();
+        this.tail = this.head;
+        this.size = 0;
+    }
+
+    //头插
+    public void addAtHead(int val) {
+        this.size++;
+        Node node = new Node(val);
+        node.next = head.next;
+        head.next = node;
+        if (size == 1) {
+            tail = node;
+        }
+    }
+
+    //尾插
+    public void addAtTail(int val) {
+        this.size++;
+        Node node = new Node(val);
+        tail.next = node;
+        tail = node;
+    }
+
+    //任意位置
+    public void addAtIndex(int index, int val) {
+        if (index > size) {
+            return;
+        }
+        if (index == size) {
+            addAtTail(val);
+            return;
+        }
+        if (index < 0) {
+            addAtHead(val);
+            return;
+        }
+        Node cur = head;
+        int i = 0;
+        //找到index的前一个元素
+        while (i < index) {
+            cur = cur.next;
+            i++;
+        }
+        Node node = new Node(val);
+        node.next = cur.next;
+        cur.next = node;
+        this.size++;
+    }
+
+    //查找
+    public int get(int index) {
+        //合法性校验
+        if (index > size - 1) {
+            return -1;
+        }
+        Node cur = head.next;
+        int i = 0;
+        //找到位置
+        while (i < index) {
+            cur = cur.next;
+            i++;
+        }
+        return cur.val;
+    }
+
+    //删除
+    public void deleteAtIndex(int index) {
+        if (index > size - 1 || index < 0) {
+            return;
+        }
+        Node cur = head;
+        int i = 0;
+        //找到前一个结点
+        while (i < index) {
+            cur = cur.next;
+            i++;
+        }
+        //维护tail指针
+        if (cur.next == tail) {
+            tail = cur;
+        }
+        //如果存在，指向待删除结点的下一个结点 
+        if (cur.next != null) {
+            cur.next = cur.next.next;
+        }
+        this.size--;
+    }
+}
+```
+
+![image.png](https://pic.leetcode.cn/1663901924-vRbMgX-image.png)
+
+写题解不易，**如果对您有帮助，记得关注 + 点赞 + 收藏呦！！！**
+**每天都会更新每日一题题解，大家加油！！**
