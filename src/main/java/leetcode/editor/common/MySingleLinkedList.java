@@ -46,6 +46,7 @@ public class MySingleLinkedList<E> {
 
         if (index == size) {
             addLast(element);
+            return;
         }
 
         Node<E> prev = head;
