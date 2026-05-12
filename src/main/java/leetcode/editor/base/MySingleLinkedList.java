@@ -1,4 +1,4 @@
-package leetcode.editor.common;
+package leetcode.editor.base;
 
 import java.util.NoSuchElementException;
 
